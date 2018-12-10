@@ -5,24 +5,25 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathDashPathEffect;
-import android.graphics.RectF;
-import android.os.Bundle;
-import android.transition.ArcMotion;
-import android.transition.PathMotion;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Interpolator;
-import android.view.animation.PathInterpolator;
+import android.view.WindowManager;
 
-import static android.animation.ObjectAnimator.ofFloat;
 
 public class ShellGameView extends View
 {
@@ -38,6 +39,20 @@ public class ShellGameView extends View
     private float selectedY = 0;
     public String difficulty = null;
 
+    public int displayWidth;
+    public int displayHeight;
+    final Handler handler = new Handler();
+
+
+    private void GetDisplaySize(Context context)
+    {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        displayWidth = size.x;
+        displayHeight = size.y;
+    }
 
     public ShellGameView(Context context) {
         super(context);
@@ -47,6 +62,7 @@ public class ShellGameView extends View
     public ShellGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Init(context);
+
     }
 
     public ShellGameView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -54,13 +70,64 @@ public class ShellGameView extends View
         Init(context);
     }
 
-    private void Init(Context context) {
+    private void Init(Context context)
+    {
+        GetDisplaySize(context);
         paint = new Paint();
-        firstShell = new AnimatableRectF(400, 200, 500, 350);
-        secondShell = new AnimatableRectF(600, 200, 700, 350);
-        thirdShell = new AnimatableRectF(800, 200, 900, 350);
-        ball = new AnimatableRectF(625, 300, 675, 350);
+        firstShell = new AnimatableRectF(displayWidth / 6, displayHeight / (float) 4.4 + 30, displayWidth / 6 + 150, displayHeight / (float) 4.4 + 230);
+        secondShell = new AnimatableRectF(displayWidth / 6 + 300, displayHeight / (float) 4.4 + 30, displayWidth / 6 + 450, displayHeight / (float) 4.4 + 230);
+        thirdShell = new AnimatableRectF(displayWidth / 6 + 600, displayHeight / (float) 4.4 + 30, displayWidth / 6 + 750, displayHeight / (float) 4.4 + 230);
+        ball = new AnimatableRectF(displayWidth / 6 + 350, displayHeight / (float) 4.4 + 180, displayWidth / 6 + 400, displayHeight / (float) 4.4 + 230);
+
+
+        MoveUp(secondShell,2000,2000);
+        MoveDown(secondShell,2000,4001);
+
+
+//        final Runnable r = new Runnable()
+//        {
+//            public void run()
+//            {
+//                MoveUp(secondShell,2000);
+//            }
+//        };
+//
+//        handler.postDelayed(r, 3000);
+//        Thread thread = new Thread()
+//        {
+//            @Override
+//            public void run() {
+//                try
+//                {
+//                    while(true)
+//                    {
+//                        sleep(1000);
+//                        handler.post(this);
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//
+//        thread.start();
+//
+//        handler.postDelayed(r, 1000);
+
+        //thread.start();
+//        Runnable r = new Runnable()
+//        {
+//            @Override
+//            public void run(){
+//                MoveUp(secondShell,2000);
+//            }
+//        };
+//
+//        Handler h = new Handler();
+//        h.postDelayed(r, 10000); // <-- the
+
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -80,44 +147,7 @@ public class ShellGameView extends View
         canvas.drawOval(firstShell, paint);
         canvas.drawOval(secondShell, paint);
         canvas.drawOval(thirdShell, paint);
-
-
-
-
     }
-
-    private Path DrawCurvedArrow(int x1, int y1, int x2, int y2, int curveRadius, boolean orientationUp)
-    {
-        Path path = new Path();
-        int midX = x1 + ((x2 - x1) / 2);
-        int midY = y1 + ((y2 - y1) / 2);
-        float xDiff = midX - x1;
-        float yDiff = midY - y1;
-        double angle;
-
-        if(orientationUp)
-            angle = (Math.atan2(yDiff, xDiff) * (180 / Math.PI)) - 90;
-        else
-            angle = (Math.atan2(yDiff, xDiff) * (180 / Math.PI)) + 90;
-        double angleRadians = Math.toRadians(angle);
-        float pointX = (float) (midX + curveRadius * Math.cos(angleRadians));
-        float pointY = (float) (midY + curveRadius * Math.sin(angleRadians));
-
-        path.moveTo(x1, y1);
-        path.cubicTo(x1,y1,pointX, pointY, x2, y2);
-
-        return path;
-    }
-
-//    private Paint SetLineColor(int lineWidth)
-//    {
-//        Paint paint  = new Paint();
-//        paint.setAntiAlias(true);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(lineWidth);
-//        paint.setColor(Color.rgb(144, 55, 66));
-//        return  paint;
-//    }
 
     private String GetSelectedShell(AnimatableRectF firstShell, AnimatableRectF secondShell, AnimatableRectF thirdShell,
                                     float touchX, float touchY) {
@@ -130,7 +160,6 @@ public class ShellGameView extends View
         else
             return "You do not select shell";
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -142,10 +171,9 @@ public class ShellGameView extends View
             case MotionEvent.ACTION_UP:
                 String shellString = GetSelectedShell(firstShell, secondShell, thirdShell, selectedX, selectedY);
                 Log.d("shell", shellString);
-                if (shellString == "secondShell") {
-                    MoveShellP1ToP2(firstShell, 4000, false);
-                    MoveShellP2ToP1(secondShell, 4000, true);
-
+                if (shellString == "firstShell") {
+                    MoveShellP1ToP3(firstShell, 4000, true);
+                    MoveShellP3ToP1(thirdShell, 4000, false);
                 }
             default:
                 return false;
@@ -153,80 +181,72 @@ public class ShellGameView extends View
         return true;
     }
 
-
-
     private void MoveShellP1ToP2(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
 
+        rectF.Animate(rectF,this, displayWidth / 6 + 300,displayWidth / 6 + 450, 360,
+                milisecondDuration, swapOrientationUp);
 
-        Path pathLeft = DrawCurvedArrow(400,400,600,600,360, swapOrientationUp);
-        Path pathTop = DrawCurvedArrow(200,200,200,200,360, swapOrientationUp);
-        Path pathRight = DrawCurvedArrow(500,500,700,700,360, swapOrientationUp);
-        Path pathBottom = DrawCurvedArrow(350,350,350,350,360, swapOrientationUp);
-
-        ObjectAnimator animateLeft = ObjectAnimator.ofFloat(rectF, "left", "left", pathLeft);
-        ObjectAnimator animateTop = ObjectAnimator.ofFloat(rectF, "top", "top", pathTop);
-        ObjectAnimator animateRight = ObjectAnimator.ofFloat(rectF, "right", "right", pathRight);
-        ObjectAnimator animateBottom = ObjectAnimator.ofFloat(rectF, "bottom", "bottom", pathBottom);
-
-        animateBottom.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                invalidate();
-            }
-        });
-
-        AnimatorSet rectAnimation = new AnimatorSet();
-        rectAnimation.playTogether(animateLeft, animateRight, animateTop, animateBottom);
-        rectAnimation.setDuration(milisecondDuration).start();
+//        Path pathLeft = DrawCurvedArrow(400,400,600,600,360, swapOrientationUp);
+//        Path pathTop = DrawCurvedArrow(200,200,200,200,360, swapOrientationUp);
+//        Path pathRight = DrawCurvedArrow(500,500,700,700,360, swapOrientationUp);
+//        Path pathBottom = DrawCurvedArrow(350,350,350,350,360, swapOrientationUp);
+//
+//        ObjectAnimator animateLeft = ObjectAnimator.ofFloat(rectF, "left", "left", pathLeft);
+//        ObjectAnimator animateTop = ObjectAnimator.ofFloat(rectF, "top", "top", pathTop);
+//        ObjectAnimator animateRight = ObjectAnimator.ofFloat(rectF, "right", "right", pathRight);
+//        ObjectAnimator animateBottom = ObjectAnimator.ofFloat(rectF, "bottom", "bottom", pathBottom);
+//
+//        animateBottom.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                invalidate();
+//            }
+//        });
+//
+//        AnimatorSet rectAnimation = new AnimatorSet();
+//        rectAnimation.playTogether(animateLeft, animateRight, animateTop, animateBottom);
+//        rectAnimation.setDuration(milisecondDuration).start();
     }
 
     private void MoveShellP1ToP3(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
 
-        Path pathLeft = DrawCurvedArrow(400,400,600,600,360, swapOrientationUp);
-        Path pathTop = DrawCurvedArrow(200,200,200,200,360, swapOrientationUp);
-        Path pathRight = DrawCurvedArrow(500,500,700,700,360, swapOrientationUp);
-        Path pathBottom = DrawCurvedArrow(350,350,350,350,360, swapOrientationUp);
+        rectF.Animate(rectF,this, displayWidth / 6 + 600,displayWidth / 6 + 750, 360,
+                milisecondDuration * 2, swapOrientationUp);
 
-        ObjectAnimator animateLeft = ObjectAnimator.ofFloat(rectF, "left", "left", pathLeft);
-        ObjectAnimator animateTop = ObjectAnimator.ofFloat(rectF, "top", "top", pathTop);
-        ObjectAnimator animateRight = ObjectAnimator.ofFloat(rectF, "right", "right", pathRight);
-        ObjectAnimator animateBottom = ObjectAnimator.ofFloat(rectF, "bottom", "bottom", pathBottom);
-
-        animateBottom.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                invalidate();
-            }
-        });
-
-        AnimatorSet rectAnimation = new AnimatorSet();
-        rectAnimation.playTogether(animateLeft, animateRight, animateTop, animateBottom);
-        rectAnimation.setDuration(milisecondDuration).start();
     }
 
     private void MoveShellP2ToP1(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
 
-        Path pathLeft = DrawCurvedArrow(600,600,400,400,360, swapOrientationUp);
-        Path pathTop = DrawCurvedArrow(200,200,200,200,360, swapOrientationUp);
-        Path pathRight = DrawCurvedArrow(700,700,500,500,360, swapOrientationUp);
-        Path pathBottom = DrawCurvedArrow(350,350,350,350,360, swapOrientationUp);
-
-        ObjectAnimator animateLeft = ObjectAnimator.ofFloat(rectF, "left", "left", pathLeft);
-        ObjectAnimator animateTop = ObjectAnimator.ofFloat(rectF, "top", "top", pathTop);
-        ObjectAnimator animateRight = ObjectAnimator.ofFloat(rectF, "right", "right", pathRight);
-        ObjectAnimator animateBottom = ObjectAnimator.ofFloat(rectF, "bottom", "bottom", pathBottom);
-
-        animateBottom.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                invalidate();
-            }
-        });
-
-        AnimatorSet rectAnimation = new AnimatorSet();
-        rectAnimation.playTogether(animateLeft, animateRight, animateTop, animateBottom);
-        rectAnimation.setDuration(milisecondDuration).start();
+        rectF.Animate(rectF,this, displayWidth / 6,displayWidth / 6 + 150, 360,
+                milisecondDuration, swapOrientationUp);
     }
 
+    private void MoveShellP2ToP3(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
+
+        rectF.Animate(rectF,this, displayWidth / 6 + 600,displayWidth / 6 + 750, 360,
+                milisecondDuration, swapOrientationUp);
+    }
+
+    private void MoveShellP3ToP1(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
+
+        rectF.Animate(rectF,this, displayWidth / 6,displayWidth / 6 + 150, 360,
+                milisecondDuration * 2, swapOrientationUp);
+    }
+
+    private void MoveShellP3ToP2(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
+
+        rectF.Animate(rectF,this, displayWidth / 6 + 300,displayWidth / 6 + 450, 360,
+                milisecondDuration, swapOrientationUp);
+    }
+
+    private void MoveUp(AnimatableRectF rectF, int milisecondDuration, int delay)
+    {
+        rectF.AnimateUpOrDown(rectF, this, 0, -200, milisecondDuration, delay);
+    }
+
+    private void MoveDown(AnimatableRectF rectF, int milisecondDuration, int delay)
+    {
+        rectF.AnimateUpOrDown(rectF, this, 0, 200, milisecondDuration, delay);
+    }
 
 }
