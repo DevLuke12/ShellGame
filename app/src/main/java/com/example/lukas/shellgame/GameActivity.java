@@ -9,10 +9,12 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity
+{
 
     private ShellGameView shellGameView;
     private Point DisplaySize;
+    public int bla = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -22,10 +24,6 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         shellGameView = findViewById(R.id.myGameView);
-//        SetDisplaySize();
-//        shellGameView.SetDisplayWidth(DisplaySize.x);
-
-
 
         Bundle extras = getIntent().getExtras();
         if (extras != null)
@@ -35,6 +33,7 @@ public class GameActivity extends Activity {
 
 
     }
+
 
     private void SetDisplaySize()
     {

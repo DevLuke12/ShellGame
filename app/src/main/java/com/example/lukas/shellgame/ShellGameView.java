@@ -35,13 +35,12 @@ public class ShellGameView extends View
     private int locationFirstShell = 1;
     private int locationSecondShell = 2;
     private int locationThirdShell = 3;
-    private float selectedX = 0;
-    private float selectedY = 0;
-    public String difficulty = null;
-
+    public String difficulty;
+    private TouchPoint touchPoint = new TouchPoint();
     public int displayWidth;
     public int displayHeight;
-    final Handler handler = new Handler();
+    private int Score;
+    private boolean isTouchable = false;
 
 
     private void GetDisplaySize(Context context)
@@ -54,20 +53,24 @@ public class ShellGameView extends View
         displayHeight = size.y;
     }
 
-    public ShellGameView(Context context) {
+    public ShellGameView(Context context)
+    {
         super(context);
         Init(context);
+
     }
 
-    public ShellGameView(Context context, AttributeSet attrs) {
+    public ShellGameView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         Init(context);
-
     }
 
-    public ShellGameView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ShellGameView(Context context, AttributeSet attrs, int defStyleAttr)
+    {
         super(context, attrs, defStyleAttr);
         Init(context);
+
     }
 
     private void Init(Context context)
@@ -79,53 +82,7 @@ public class ShellGameView extends View
         thirdShell = new AnimatableRectF(displayWidth / 6 + 600, displayHeight / (float) 4.4 + 30, displayWidth / 6 + 750, displayHeight / (float) 4.4 + 230);
         ball = new AnimatableRectF(displayWidth / 6 + 350, displayHeight / (float) 4.4 + 180, displayWidth / 6 + 400, displayHeight / (float) 4.4 + 230);
 
-
-        MoveUp(secondShell,2000,2000);
-        MoveDown(secondShell,2000,4001);
-
-
-//        final Runnable r = new Runnable()
-//        {
-//            public void run()
-//            {
-//                MoveUp(secondShell,2000);
-//            }
-//        };
-//
-//        handler.postDelayed(r, 3000);
-//        Thread thread = new Thread()
-//        {
-//            @Override
-//            public void run() {
-//                try
-//                {
-//                    while(true)
-//                    {
-//                        sleep(1000);
-//                        handler.post(this);
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//
-//        thread.start();
-//
-//        handler.postDelayed(r, 1000);
-
-        //thread.start();
-//        Runnable r = new Runnable()
-//        {
-//            @Override
-//            public void run(){
-//                MoveUp(secondShell,2000);
-//            }
-//        };
-//
-//        Handler h = new Handler();
-//        h.postDelayed(r, 10000); // <-- the
-
+        MoveUpAndDown(secondShell,true);
     }
 
 
@@ -149,32 +106,35 @@ public class ShellGameView extends View
         canvas.drawOval(thirdShell, paint);
     }
 
-    private String GetSelectedShell(AnimatableRectF firstShell, AnimatableRectF secondShell, AnimatableRectF thirdShell,
-                                    float touchX, float touchY) {
+    private AnimatableRectF GetSelectedShell(float touchX, float touchY)
+    {
         if (firstShell.contains(touchX, touchY))
-            return "firstShell";
+            return firstShell;
         else if (secondShell.contains(touchX, touchY))
-            return "secondShell";
+            return secondShell;
         else if (thirdShell.contains(touchX, touchY))
-            return "thirdShell";
+            return thirdShell;
         else
-            return "You do not select shell";
+            return null;
     }
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
+    public boolean onTouchEvent(MotionEvent event)
+    {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                selectedX = event.getX();
-                selectedY = event.getY();
+                touchPoint.touchFromX = event.getX();
+                touchPoint.touchFromY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
-                String shellString = GetSelectedShell(firstShell, secondShell, thirdShell, selectedX, selectedY);
-                Log.d("shell", shellString);
-                if (shellString == "firstShell") {
-                    MoveShellP1ToP3(firstShell, 4000, true);
-                    MoveShellP3ToP1(thirdShell, 4000, false);
+                touchPoint.touchToX = event.getX();
+                touchPoint.touchToY = event.getY();
+
+                if(touchPoint.IsSwiftLineUpCorrect(touchPoint) &&
+                        GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY) != null)
+                {
+                    MoveUpAndDown(GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY),false);
                 }
+                break;
             default:
                 return false;
         }
@@ -241,12 +201,31 @@ public class ShellGameView extends View
 
     private void MoveUp(AnimatableRectF rectF, int milisecondDuration, int delay)
     {
-        rectF.AnimateUpOrDown(rectF, this, 0, -200, milisecondDuration, delay);
+        rectF.AnimateUpOrDown(rectF, this, 0, -175, milisecondDuration, delay);
     }
 
     private void MoveDown(AnimatableRectF rectF, int milisecondDuration, int delay)
     {
-        rectF.AnimateUpOrDown(rectF, this, 0, 200, milisecondDuration, delay);
+        rectF.AnimateUpOrDown(rectF, this, 0, 175, milisecondDuration, delay);
     }
 
+    private void MoveUpAndDown(final AnimatableRectF rectF, boolean isIninial)
+    {
+        int delay = 0;
+        if(isIninial)
+            delay = 2000;
+        else
+            delay = 0;
+
+        MoveUp(rectF, 2000, delay);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                MoveDown(rectF,2000, 0);
+            }
+        }, delay = isIninial == true ?  delay + 2001 : 2001);
+    }
 }
