@@ -24,23 +24,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.util.Random;
+
 
 public class ShellGameView extends View
 {
     private Paint paint;
-    private AnimatableRectF firstShell;
-    private AnimatableRectF secondShell;
-    private AnimatableRectF thirdShell;
-    private AnimatableRectF ball;
-    private int locationFirstShell = 1;
-    private int locationSecondShell = 2;
-    private int locationThirdShell = 3;
+    protected AnimatableRectF firstShell;
+    protected AnimatableRectF secondShell;
+    protected AnimatableRectF thirdShell;
+    protected AnimatableRectF ball;
+    private int posFirstShell = 1;
+    private int posSecondShell = 2;
+    private int posThirdShell = 3;
     public String difficulty;
     private TouchPoint touchPoint = new TouchPoint();
     public int displayWidth;
     public int displayHeight;
     private int Score;
     private boolean isTouchable = false;
+    private Random rngSwap = new Random();
+    //int i1 = r.nextInt(80 - 65) + 65;
 
 
     private void GetDisplaySize(Context context)
@@ -82,7 +86,7 @@ public class ShellGameView extends View
         thirdShell = new AnimatableRectF(displayWidth / 6 + 600, displayHeight / (float) 4.4 + 30, displayWidth / 6 + 750, displayHeight / (float) 4.4 + 230);
         ball = new AnimatableRectF(displayWidth / 6 + 350, displayHeight / (float) 4.4 + 180, displayWidth / 6 + 400, displayHeight / (float) 4.4 + 230);
 
-        MoveUpAndDown(secondShell,true);
+        //MoveUpAndDown(secondShell,true);
     }
 
 
@@ -171,7 +175,7 @@ public class ShellGameView extends View
     private void MoveShellP1ToP3(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
 
         rectF.Animate(rectF,this, displayWidth / 6 + 600,displayWidth / 6 + 750, 360,
-                milisecondDuration * 2, swapOrientationUp);
+                milisecondDuration, swapOrientationUp);
 
     }
 
@@ -190,7 +194,7 @@ public class ShellGameView extends View
     private void MoveShellP3ToP1(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
 
         rectF.Animate(rectF,this, displayWidth / 6,displayWidth / 6 + 150, 360,
-                milisecondDuration * 2, swapOrientationUp);
+                milisecondDuration, swapOrientationUp);
     }
 
     private void MoveShellP3ToP2(AnimatableRectF rectF, int milisecondDuration, boolean swapOrientationUp) {
@@ -209,7 +213,7 @@ public class ShellGameView extends View
         rectF.AnimateUpOrDown(rectF, this, 0, 175, milisecondDuration, delay);
     }
 
-    private void MoveUpAndDown(final AnimatableRectF rectF, boolean isIninial)
+    public void MoveUpAndDown(final AnimatableRectF rectF, boolean isIninial)
     {
         int delay = 0;
         if(isIninial)
@@ -217,15 +221,176 @@ public class ShellGameView extends View
         else
             delay = 0;
 
-        MoveUp(rectF, 2000, delay);
+        MoveUp(rectF, 1500, delay);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
-                MoveDown(rectF,2000, 0);
+                MoveDown(rectF,1500, 0);
             }
-        }, delay = isIninial == true ?  delay + 2001 : 2001);
+        }, delay = isIninial == true ?  delay + 1501 : 1501);
     }
+
+    private Boolean RngSwapOrientation()
+    {
+        int tmp = rngSwap.nextInt(2) + 1;
+
+        if(tmp == 1)
+            return true;
+        else
+            return false;
+    }
+    public void SwapFrame(int milisecondDuration)
+    {
+        int pom = rngSwap.nextInt(3) + 1;
+        boolean swapOrientationUp = RngSwapOrientation();
+        if(pom == 1)
+        {
+            if(posFirstShell==1)
+            {
+                MoveShellP1ToP2(firstShell, milisecondDuration, swapOrientationUp);
+                posFirstShell=2;
+                if(posSecondShell==2)
+                {
+                    MoveShellP2ToP1(secondShell, milisecondDuration, !swapOrientationUp);
+                    posSecondShell=1;
+                }
+                else
+                {
+                    MoveShellP2ToP1(thirdShell, milisecondDuration, !swapOrientationUp);
+                    posThirdShell=1;
+                }
+            }
+            else if(posSecondShell==1)
+            {
+                MoveShellP1ToP2(secondShell, milisecondDuration, !swapOrientationUp);
+                posSecondShell = 2;
+                if(posFirstShell == 2)
+                {
+                    MoveShellP2ToP1(firstShell, milisecondDuration, swapOrientationUp);
+                    posFirstShell = 1;
+                }
+                else
+                {
+                    MoveShellP2ToP1(thirdShell, milisecondDuration, swapOrientationUp);
+                    posThirdShell=1;
+                }
+            }
+            else if(posThirdShell==1)
+            {
+                MoveShellP1ToP2(thirdShell, milisecondDuration, !swapOrientationUp);
+                posThirdShell=2;
+                if(posFirstShell==2)
+                {
+                    MoveShellP2ToP1(firstShell, milisecondDuration, swapOrientationUp);
+                    posFirstShell=1;
+                }
+                else
+                {
+                    MoveShellP2ToP1(secondShell, milisecondDuration, swapOrientationUp);
+                    posSecondShell=1;
+                }
+            }
+        }
+        else if(pom == 2)
+        {
+            if(posFirstShell == 1)
+            {
+                MoveShellP1ToP3(firstShell,milisecondDuration,swapOrientationUp);
+                posFirstShell=3;
+                if(posSecondShell==3)
+                {
+                    MoveShellP3ToP1(secondShell,milisecondDuration,!swapOrientationUp);
+                    posSecondShell=1;
+                }
+                else
+                {
+                    MoveShellP3ToP1(thirdShell,milisecondDuration,!swapOrientationUp);
+                    posThirdShell=1;
+                }
+            }
+            else if(posSecondShell==1)
+            {
+                MoveShellP1ToP3(secondShell,milisecondDuration,!swapOrientationUp);
+                posSecondShell=3;
+                if(posFirstShell==3)
+                {
+                    MoveShellP3ToP1(firstShell,milisecondDuration,swapOrientationUp);
+                    posFirstShell=1;
+                }
+                else
+                {
+                    MoveShellP3ToP1(thirdShell,milisecondDuration,swapOrientationUp);
+                    posThirdShell=1;
+                }
+            }
+            else if(posThirdShell==1)
+            {
+                MoveShellP1ToP3(thirdShell,milisecondDuration,swapOrientationUp);
+                posThirdShell=3;
+                if(posFirstShell==3)
+                {
+                    MoveShellP3ToP1(firstShell,milisecondDuration,!swapOrientationUp);
+                    posFirstShell=1;
+                }
+                else
+                {
+                    MoveShellP3ToP1(secondShell,milisecondDuration,!swapOrientationUp);
+                    posSecondShell=1;
+                }
+            }
+        }
+        else if(pom == 3)
+        {
+            if(posFirstShell==2)
+            {
+                MoveShellP2ToP3(firstShell,milisecondDuration,!swapOrientationUp);
+                posFirstShell=3;
+                if(posSecondShell==3)
+                {
+                    MoveShellP3ToP2(secondShell,milisecondDuration,swapOrientationUp);
+                    posSecondShell=2;
+                }
+                else
+                {
+                    MoveShellP3ToP2(thirdShell,milisecondDuration,swapOrientationUp);
+                    posThirdShell=2;
+                }
+            }
+            else if(posSecondShell==2)
+            {
+                MoveShellP2ToP3(secondShell,milisecondDuration,swapOrientationUp);
+                posSecondShell=3;
+                if(posFirstShell==3)
+                {
+                    MoveShellP3ToP2(firstShell,milisecondDuration,!swapOrientationUp);
+                    posFirstShell=2;
+                }
+                else
+                {
+                    MoveShellP3ToP2(thirdShell,milisecondDuration,!swapOrientationUp);
+                    posThirdShell=2;
+                }
+            }
+            else if(posThirdShell==2)
+            {
+                MoveShellP2ToP3(thirdShell,milisecondDuration,!swapOrientationUp);
+                posThirdShell=3;
+                if(posFirstShell==3)
+                {
+                    MoveShellP3ToP2(firstShell,milisecondDuration,swapOrientationUp);
+                    posFirstShell=2;
+                }
+                else
+                {
+                    MoveShellP3ToP2(secondShell,milisecondDuration,swapOrientationUp);
+                    posSecondShell=2;
+                }
+            }
+        }
+    }
+
+
 }
