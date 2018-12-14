@@ -17,6 +17,7 @@ public class AnimatableRectF extends RectF
     private View View;
 
     public boolean IsAnimateRunning;
+    private String name;
 //    public void onAnimationStart(Animation anim){};
 //    public void onAnimationRepeat(Animation anim){};
 //    public void onAnimationEnd(Animation anim)
@@ -55,8 +56,18 @@ public class AnimatableRectF extends RectF
 
 
 
-    public void Animate(AnimatableRectF rectF, View view, float newLeft,float newRight,
-                        int curveRadius, int milisecondDuration, boolean swapOrientationUp)
+    public String getName()
+    {
+        return name;
+    }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+
+    public void AnimateByPath(AnimatableRectF rectF, View view, float newLeft, float newRight,
+                              int curveRadius, int milisecondDuration, boolean swapOrientationUp)
     {
         this.View = view;
 
@@ -83,7 +94,7 @@ public class AnimatableRectF extends RectF
     }
 
 
-    public void AnimateUpOrDown(AnimatableRectF rectF, View view, float newX, float newY, int milisecondDuration, int delay)
+    public void AnimateByXY(AnimatableRectF rectF, View view, float newX, float newY, int milisecondDuration, int delay)
     {
         this.View = view;
 

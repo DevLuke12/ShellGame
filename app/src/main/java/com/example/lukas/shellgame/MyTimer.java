@@ -1,11 +1,6 @@
 package com.example.lukas.shellgame;
 
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
-
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class MyTimer
 {
@@ -43,7 +38,7 @@ public class MyTimer
             @Override
             public void run()
             {
-                view.SwapFrame(2000);
+                view.SwapShells(2000);
             }
         };
     }
