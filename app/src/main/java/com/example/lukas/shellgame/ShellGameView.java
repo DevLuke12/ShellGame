@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.beans.PropertyChangeSupport;
 import java.util.Random;
@@ -35,6 +36,7 @@ public class ShellGameView extends View
     private int posBall = 0;
     protected int findingShell = 0;
     protected boolean ballWasFound = false;
+    protected boolean endGame = false;
     protected PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     private void GetDisplaySize(Context context)
@@ -132,15 +134,29 @@ public class ShellGameView extends View
                 if(touchPoint.IsSwiftLineUpCorrect(touchPoint) &&
                         GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY) != null)
                 {
+
                     MoveUpAndDown(GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY),false);
 
                     if(IsBallInsideShell(GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY).getName()))
                     {
-                        //Log.d("score", String.valueOf(score).toString());
+                        Log.d("ISINSIDE","ANO");
+                        isTouchable = false;
                         ballWasFound = true;
                         this.changes.firePropertyChange("ballWasFound",false,true);
-                        isTouchable = false;
+
                     }
+                    else
+                    {
+                        isTouchable = true;
+                        endGame = true;
+                        this.changes.firePropertyChange("endGame",false,true);
+                    }
+
+                }
+                else if(!touchPoint.IsSwiftLineUpCorrect(touchPoint) &&
+                        GetSelectedShell(touchPoint.touchFromX, touchPoint.touchFromY) != null)
+                {
+                    Toast.makeText(this.getContext(), "Do longer swift line", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:

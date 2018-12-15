@@ -14,15 +14,16 @@
         android:layout_height="wrap_content"
         android:text="Shell game"
         android:gravity="center"
-        android:textSize="26dp"/>
+        android:textSize="26dp"
+        android:textColor="@color/colorWhite"/>
 
     <Button
         android:id="@+id/btnNewGame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New game"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"/>
 
@@ -31,8 +32,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Top scores"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"/>
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"/>
 
@@ -41,8 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Quit"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"/>
 

@@ -15,5 +15,4 @@ public class TouchPoint
        else
            return false;
     }
-
 }

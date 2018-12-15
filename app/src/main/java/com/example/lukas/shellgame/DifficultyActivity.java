@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 public class DifficultyActivity extends Activity
@@ -18,7 +19,12 @@ public class DifficultyActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        if(((ExtendMyApplication) getApplication()).getLightBackground())
+            setTheme(R.style.LightTheme);
+        else
+            setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_difficulty);
 
         btnEasy = findViewById(R.id.btnEasy);

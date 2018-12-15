@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:text="Select difficulty"
         android:gravity="center"
-        android:textSize="26dp"/>
+        android:textSize="26dp"
+        android:textColor="@color/colorWhite"/>
 
     <Button
         android:id="@+id/btnEasy"

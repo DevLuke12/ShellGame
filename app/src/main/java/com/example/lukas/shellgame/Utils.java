@@ -4,14 +4,13 @@ import android.os.Handler;
 
 public class Utils
 {
-
-    // Delay mechanism
-
-    public interface DelayCallback{
+    public interface DelayCallback
+    {
         void afterDelay();
     }
 
-    public static void delay(int miliseconds, final DelayCallback delayCallback){
+    public static void delay(int miliseconds, final DelayCallback delayCallback)
+    {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

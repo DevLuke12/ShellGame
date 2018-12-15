@@ -12,47 +12,80 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
-    android:id="@+id/txtCaptionActualScore"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="5dp"
-    android:text="Actual score:" />
 
-    <TextView
-    android:id="@+id/txtActualScore"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView" />
+        <TextView
+            android:id="@+id/txtCaptionPlayerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:text="Name:"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
 
-    <TextView
-    android:id="@+id/txtCaptionDifficult"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="100dp"
-    android:layout_marginRight="5dp"
-    android:text="Difficult:" />
+        <TextView
+            android:id="@+id/txtPlayerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
 
-    <TextView
-    android:id="@+id/txtDifficult"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="5dp"
-    android:text="TextView" />
 
-    <TextView
-    android:id="@+id/txtCaptionBestScore"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="100dp"
-    android:layout_marginRight="5dp"
-    android:text="Best score:" />
+        <TextView
+            android:id="@+id/txtCaptionDifficult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:text="Difficulty:"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
 
+        <TextView
+            android:id="@+id/txtDifficult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtCaptionActualScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:text="Actual score:"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtActualScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+
+
+
+        <TextView
+            android:id="@+id/txtCaptionBestScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:text="Best score:"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
     <TextView
     android:id="@+id/txtBestScore"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="TextV" />
+    android:text=""
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"/>
     </LinearLayout>
 
     <com.example.lukas.shellgame.ShellGameView
