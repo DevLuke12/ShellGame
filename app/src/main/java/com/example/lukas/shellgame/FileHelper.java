@@ -48,7 +48,7 @@ public class FileHelper
     }
     public String ReadFromFile(String fileName, Context context)
     {
-        if(ExistFile(fileName,context))
+        if(!ExistFile(fileName,context))
             return "";
 
         String ret = "";

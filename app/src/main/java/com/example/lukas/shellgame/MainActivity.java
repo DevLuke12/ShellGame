@@ -10,7 +10,7 @@ import android.widget.Button;
 public class MainActivity extends Activity
 {
     private Button btnNewGame;
-    private Button btnTopScores;
+    private Button btnTopScore;
     private Button btnCloseGame;
     private Button btnSettings;
     @Override
@@ -25,11 +25,13 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         btnNewGame = findViewById(R.id.btnNewGame);
-        btnTopScores = findViewById(R.id.btnTopScores);
+        btnTopScore = findViewById(R.id.btnTopScores);
         btnSettings = findViewById(R.id.btnSettings);
         btnCloseGame = findViewById(R.id.btnCloseGame);
         btnNewGame.setOnClickListener(openNewGame);
         btnSettings.setOnClickListener(openSettings);
+        btnTopScore.setOnClickListener(openTopScore);
+        btnCloseGame.setOnClickListener(closeGame);
     }
 
     private View.OnClickListener openNewGame = new View.OnClickListener()
@@ -38,7 +40,6 @@ public class MainActivity extends Activity
         {
             Intent intent = new Intent(MainActivity.this,
                     DifficultyActivity.class);
-            //intent.putExtra(SELECTED_DIFFICULTY, myText2.getText().toString());
             startActivity(intent);
         }
     };
@@ -49,8 +50,24 @@ public class MainActivity extends Activity
         {
             Intent intent = new Intent(MainActivity.this,
                     SettingsActivity.class);
-            //intent.putExtra(SELECTED_DIFFICULTY, myText2.getText().toString());
             startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener openTopScore = new View.OnClickListener()
+    {
+        public void onClick(View v)
+        {
+            Intent intent = new Intent(MainActivity.this,
+                    TopScoreActivity.class);
+            startActivity(intent);
+        }
+    };
+    private View.OnClickListener closeGame = new View.OnClickListener()
+    {
+        public void onClick(View v)
+        {
+            finishAffinity();
         }
     };
 }

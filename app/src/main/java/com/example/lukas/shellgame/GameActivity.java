@@ -279,13 +279,30 @@ public class GameActivity extends Activity
 
     private void DecreasePeriodRate(int value)
     {
-        this.periodRate -= value;
+        if(this.periodRate <= 0)
+        {
+            myVibrator.Vibrate(2000);
+
+            Utils.delay(3000, new Utils.DelayCallback() {
+                @Override
+                public void afterDelay()
+                {
+                    builder.setMessage("You are winner! Do you want to play new game").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
+            });
+        }
+        else
+        {
+            this.periodRate -= value;
+        }
+
     }
 
     private void PlayMoveSound()
     {
         if (moveSound.isPlaying())
-            moveSound.stop();
+            moveSound.seekTo(0);
         else
             moveSound.start();
     }

@@ -11,9 +11,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/LightTheme"
-        >
-        <activity android:name=".MainActivity"
+        android:theme="@style/LightTheme">
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,14 +24,19 @@
         <activity
             android:name=".GameActivity"
             android:label="Game"
-            android:screenOrientation="landscape"
-            >
+            android:screenOrientation="landscape">
+
         </activity>
-        <activity android:name=".DifficultyActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".DifficultyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
             android:screenOrientation="portrait">
 
+        </activity>
+        <activity android:name=".TopScoreActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

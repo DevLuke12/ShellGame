@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ public class SettingsActivity extends Activity
 
     private EditText txtPlayerName;
     private CheckBox chckLightBackground;
+    private Button btnHome;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -29,6 +32,7 @@ public class SettingsActivity extends Activity
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
         chckLightBackground = findViewById(R.id.chkLightBackground);
+        btnHome = findViewById(R.id.btnHome);
         txtPlayerName = findViewById(R.id.txtPlayerName);
         txtPlayerName.setText(((ExtendMyApplication) getApplication()).getPlayerName());
         txtPlayerName.addTextChangedListener(new TextWatcher()
@@ -67,5 +71,14 @@ public class SettingsActivity extends Activity
 
         }
     });
+        btnHome.setOnClickListener(closeSettings);
     }
+
+    private View.OnClickListener closeSettings = new View.OnClickListener()
+    {
+        public void onClick(View v)
+        {
+            finish();
+        }
+    };
 }
